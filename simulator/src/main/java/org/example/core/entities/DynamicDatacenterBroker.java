@@ -18,7 +18,7 @@ public class DynamicDatacenterBroker extends DatacenterBroker {
             if (cloudlet.getGuestId() == -1) {
                 throw new IllegalStateException("Cloudlet %d was not scheduled".formatted(cloudlet.getCloudletId()));
             }
-        }
+        } // 防止在尚未分配的情况下提交任务
 
         submitCloudlets();
     }

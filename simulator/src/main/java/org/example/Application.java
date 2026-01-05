@@ -42,11 +42,11 @@ public class Application implements Callable<Integer> {
         System.err.println("Running simulation...");
         Log.disable();
 
-        // Read input file or stdin
+        // Read input file or stdin 读取数据集（来自文件或标准输入），并根据数据集计算仿真总时长
         var dataset = datasetFile != null
                 ? Dataset.fromFile(datasetFile)
                 : Dataset.fromStdin();
-        var duration = dataset.maximumHorizon();
+        var duration = dataset.maximumHorizon();// 计算仿真总时长用于后续配置
 
         // Configure simulation
         var config = SimulatedWorldConfig.builder()
@@ -58,21 +58,24 @@ public class Application implements Callable<Integer> {
         var gymSharedQueue = new GymSharedQueue<StaticObservation, StaticAction>();
 
         // Create scheduler, and executor
+        // 将共享队列注入到所选的静态或Gym调度算法中
         var scheduler = new WorkflowSchedulerFactory().staticSharedQueue(gymSharedQueue)
                 .create(algorithm);
-        var executor = new LocalWorkflowExecutor();
+        var executor = new LocalWorkflowExecutor(); //构建本地任务执行器
 
         // Thread for Py4J connector
         var gymConnector = new Py4JConnector<>(py4JPort, gymSharedQueue);
         var gymThread = new Thread(gymConnector);
-        gymThread.start();
+        gymThread.start(); //在独立线程中启动Py4J连接器
+        // python能通过网关调用step/reset与Java环境交换观察/动作
 
         // Run simulation
         var world = SimulatedWorld.builder().dataset(dataset)
                 .scheduler(scheduler).executor(executor)
                 .config(config).build();
-        var solution = world.runSimulation();
+        var solution = world.runSimulation(); //启动并运行cloudsim
 
+        // 仿真在时间队列耗尽或达到预设终止时结束，返回一个包含执行结果的对象
         var rewardSensor = RewardSensor.getInstance();
         var hostRegistry = HostRegistry.getInstance();
         var reward = rewardSensor.finalReward(duration);
@@ -81,7 +84,7 @@ public class Application implements Callable<Integer> {
         finalAgentResult.addInfo("solution", solution.toJson());
         finalAgentResult.addInfo("total_energy_consumption_j", Double.toString(hostRegistry.getTotalEnergyConsumptionJ()));
         finalAgentResult.addInfo("active_energy_consumption_j", Double.toString(hostRegistry.getActiveEnergyConsumptionJ()));
-        gymSharedQueue.setObservation(finalAgentResult);
+        gymSharedQueue.setObservation(finalAgentResult);  //将终结观测放回共享队列，供python端在收到截断/终止信号时读取并结束agent逻辑
 
         var cloudletRegistry = CloudletRegistry.getInstance();
         var taskStateSensor = TaskStateSensor.getInstance();
