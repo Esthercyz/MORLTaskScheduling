@@ -1,3 +1,3 @@
 [submodule "simulator/cloudsim"]
 	path = simulator/cloudsim
-	url = https://github.com/Cloudslab/cloudsim
+    url = git@github.com:Cloudslab/cloudsim.git  # 改为 SSH 地址

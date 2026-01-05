@@ -20,6 +20,7 @@ def generate_hosts(n: int, rng: np.random.RandomState) -> list[Host]:
         available_hosts: list = json.load(f)
 
     hosts: list[Host] = []
+    // 从配置文件中读取规格并生成n个host对象
     for i in range(n):
         spec = available_hosts[rng.randint(0, len(available_hosts))]
         hosts.append(
@@ -62,6 +63,7 @@ def allocate_vms(vms: list[Vm], hosts: list[Host], rng: np.random.RandomState):
     Allocate VMs to hosts randomly.
     """
 
+    // 随机把VM分配到主机上
     for vm in vms:
         host = hosts[rng.randint(0, len(hosts))]
         vm.host_id = host.id

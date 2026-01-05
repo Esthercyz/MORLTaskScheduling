@@ -42,6 +42,7 @@ public class BufferedStaticWorkflowScheduler implements WorkflowScheduler {
 
     @Override
     public Optional<VmAssignmentDto> schedule() {
+        // 每次调用 schedule() 只会返回（并移除）一个 VmAssignmentDto
         if (!lastSchedulingResult.isEmpty()) {
             return Optional.ofNullable(lastSchedulingResult.removeFirst());
         }

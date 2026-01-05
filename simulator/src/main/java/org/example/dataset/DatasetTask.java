@@ -10,5 +10,5 @@ public class DatasetTask {
     private final int workflowId;
     private final int length;
     private final int reqMemoryMb;
-    private final List<Integer> childIds;
+    private final List<Integer> childIds; //子任务集合
 }

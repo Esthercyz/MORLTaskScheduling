@@ -1,4 +1,10 @@
 # docs and experiment results can be found at https://docs.cleanrl.dev/rl-algorithms/ppo/#ppopy
+# ====== 这部分必须放在train.py的第一行 ======
+import sys
+import os
+# 获取根目录：workflow-cloudsim-drlgnn（train.py的祖父的祖父目录）
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(ROOT_DIR)
 from pathlib import Path
 import random
 import time
@@ -15,7 +21,6 @@ import tyro
 from torch.utils.tensorboard import SummaryWriter
 
 from icecream import ic
-
 from scheduler.config.settings import MIN_TESTING_DS_SEED
 from scheduler.dataset_generator.gen_dataset import DatasetArgs
 from scheduler.rl_model.agents.agent import Agent

@@ -25,9 +25,9 @@ public class StaticWorkflowScheduler implements WorkflowScheduler {
         this.algorithm = algorithm;
     }
 
-    @Override
+    @Override //在实际调度之前收集所有VM信息
     public void notifyNewVm(@NonNull VmDto newVm) {
-        if (schedulingResult != null) {
+        if (schedulingResult != null) { //已经计算出调度结果，禁止在计算后再添加新VM 
             throw new IllegalStateException("Cannot add new VMs after scheduling.");
         }
         vms.add(newVm);
@@ -41,7 +41,7 @@ public class StaticWorkflowScheduler implements WorkflowScheduler {
         workflows.add(newWorkflow);
     }
 
-    @Override
+    @Override // 每次调用返回一个待下发的单条VM-Task分配（empty表示当前没有可下发项）
     public Optional<VmAssignmentDto> schedule() {
         if (schedulingResult == null) {
             if (workflows.isEmpty() || vms.isEmpty()) {

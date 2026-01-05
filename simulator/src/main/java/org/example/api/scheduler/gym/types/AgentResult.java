@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-@Data
+@Data //封装智能体与环境交互结果的不可变值对象
 public final class AgentResult<TObservation> {
     private final TObservation observation;
     private final double reward;

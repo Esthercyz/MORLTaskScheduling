@@ -41,8 +41,11 @@ public class Dataset {
     }
 
     public int maximumHorizon() {
+        //计算所有虚拟机中最慢的CPU速度
         var minimumVmSpeed = vms.stream().mapToInt(DatasetVm::getCpuSpeedMips).min().orElse(0);
+        // 对每个工作流，计算其所有任务的长度总和，然后将所有工作流的总长度相加
         var totalLength = workflows.stream().mapToInt(workflow -> workflow.getTasks().stream().mapToInt(DatasetTask::getLength).sum()).sum();
+        // 计算最大时间范围，假设所有任务都在最慢的虚拟机上运行
         return (int) (totalLength / (double) minimumVmSpeed) + 1000;
     }
 }

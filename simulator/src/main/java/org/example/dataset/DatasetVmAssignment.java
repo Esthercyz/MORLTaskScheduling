@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class DatasetVmAssignment {
+public class DatasetVmAssignment { //定义虚拟机和主机之间的分配关系
     private final int workflowId;
     private final int taskId;
     private final int vmId;

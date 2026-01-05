@@ -3,7 +3,7 @@ package org.example.api.scheduler.gym;
 import org.example.api.scheduler.gym.types.AgentResult;
 
 /// Represents an agent that interacts with a Gym environment.
-/// This is called from the Python side via Py4J.
+/// This is called from the Python side via Py4J. python端调用此类与Java端环境交互
 public class GymAgent<TObservation, TAction> {
     private final GymSharedQueue<TObservation, TAction> queue;
 
@@ -15,7 +15,7 @@ public class GymAgent<TObservation, TAction> {
     /// This will set the action and block, waiting for the environment to return an observation.
     public AgentResult<TObservation> step(TAction action) {
         queue.setAction(action);
-        return queue.getObservation();
+        return queue.getObservation(); //返回值封装下一步的observation，reward, terminated, truncated等信息
     }
 
     /// Resets the environment.

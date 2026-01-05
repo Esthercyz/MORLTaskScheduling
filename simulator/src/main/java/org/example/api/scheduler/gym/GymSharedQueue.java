@@ -8,7 +8,10 @@ import java.util.concurrent.BlockingQueue;
 /// Represents a shared queue between the Gym environment and the Gym agent.
 /// This is used to communicate between the Java and Python sides.
 public class GymSharedQueue<TObservation, TAction> {
+    // 使用两个容量为1的阻塞队列实现Java和Python之间的同步通信
+    // 传递环境到智能体的观察值
     private final BlockingQueue<AgentResult<TObservation>> observationQueue = new ArrayBlockingQueue<>(1);
+    // 传递智能体到环境的动作值
     private final BlockingQueue<TAction> actionQueue = new ArrayBlockingQueue<>(1);
 
     /// Gets the observation from the queue.

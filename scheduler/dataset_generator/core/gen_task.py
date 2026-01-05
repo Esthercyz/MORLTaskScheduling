@@ -85,12 +85,14 @@ def generate_dag_gnp(n: int, p: float | None, rng: np.random.RandomState) -> dic
     nodes: dict[int, set[int]] = {i: set() for i in range(n)}
     start_nodes: set[int] = set(range(1, n))
 
+    // 用有向边只从较小索引指向较大索引的方法保证无环
     for i in range(1, n):
         for j in range(i + 1, n):
             if rng.random() < p:
                 nodes[i].add(j)
                 start_nodes.discard(j)
 
+    // 把没有入边的节点连接到起始节点0，使0成为单一源节点
     for i in start_nodes:
         nodes[0].add(i)
 

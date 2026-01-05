@@ -36,8 +36,10 @@ def generate_workflows(
     arrival_time = 0
     workflows: list[Workflow] = []
     for workflow_id in range(workflow_count):
+        // 为每个workflow生成DAG
         dag = dag_gen()
         tasks: list[Task] = [
+            // 把DAG节点映射为task实例，最终返回一个workflow列表
             Task(
                 id=task_id,
                 workflow_id=workflow_id,

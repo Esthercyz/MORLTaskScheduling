@@ -18,7 +18,7 @@ public class WorkflowSchedulerFactory {
 
     /// Create a new WorkflowScheduler instance.
     public WorkflowScheduler create(String algorithm) {
-        if (algorithm.equals("static:gym")) {
+        if (algorithm.equals("static:gym")) { //调度决策会委托到外部Gym智能体，通过共享队列进行交互
             return new StaticWorkflowScheduler(new StaticGymSchedulingAlgorithm(staticSharedQueue));
         } else if (algorithm.equals("static:round-robin")) {
             return new StaticWorkflowScheduler(new RoundRobinSchedulingAlgorithm());
